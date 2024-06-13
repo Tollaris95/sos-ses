@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [showQuestion, setShowQuestion] = useState<boolean>(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null);
+
+  const handleButtonClick = () => {
+    setShowQuestion(true);
+  };
+
+  const handleAnswerClick = (isCorrect: boolean) => {
+    setSelectedAnswer(isCorrect);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="background">
+      {!showQuestion ? (
+        <button className="exercise-button" onClick={handleButtonClick}>
+          Exercice
+        </button>
+      ) : (
+        <div className="question-container">
+          <h1 className="question-text">As tu le meilleur amoureux du monde ?</h1>
+          <div className="answers">
+            <button
+              className={`answer-button ${selectedAnswer === false ? 'wrong' : ''}`}
+              onClick={() => handleAnswerClick(false)}
+            >
+              Non
+            </button>
+            <button
+              className={`answer-button ${selectedAnswer === false ? 'wrong' : ''}`}
+              onClick={() => handleAnswerClick(false)}
+            >
+              Oui
+            </button>
+            <button
+              className={`answer-button ${selectedAnswer === true ? 'correct' : ''}`}
+              onClick={() => handleAnswerClick(true)}
+            >
+              Oui et je vais lui faire le plus gros des bisous
+            </button>
+            <button
+              className={`answer-button ${selectedAnswer === false ? 'wrong' : ''}`}
+              onClick={() => handleAnswerClick(false)}
+            >
+              Non je vais le quitter
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
