@@ -10,17 +10,17 @@
   flex-direction: column;
 }
 
-.question-container {
+.question-container, .confirmation-container {
   color: red;
+  text-align: center;
 }
 
-.question-text {
+.question-text, .confirmation-text {
   background-color: black;
   color: white;
   padding: 10px;
   border-radius: 5px;
 }
-
 
 .exercise-button {
   background-color: white;
@@ -35,10 +35,6 @@
 
 .exercise-button:hover {
   background-color: #f0f0f0;
-}
-
-.question-container {
-  text-align: center;
 }
 
 .answers {
