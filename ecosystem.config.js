@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "sos-ses",
       script: "npm start",
-      cwd: "/home/sos-ses",
+      cwd: "/home/sos-ses", 
       env_production: {
         PORT: 3000,
         NODE_ENV: "production",
@@ -21,13 +21,13 @@ module.exports = {
     production: {
       user: "root",
       host: "163.172.160.241",
-      ref: "origin/main",
+      ref: "origin/master", 
       repo: "git@github.com:Tollaris95/sos-ses.git",
       path: "/home/sos-ses", 
       "pre-deploy-local": "",
-      "post-deploy": "npm install && npm run build && pm2 startOrReload ecosystem.config.js",
+      "pre-deploy": "rm -rf /home/sos-ses/* && git clone --depth=1 -b master git@github.com:Tollaris95/sos-ses.git /home/sos-ses",
+      "post-deploy": "cd /home/sos-ses && npm install && npm run build && pm2 startOrReload ecosystem.config.js",
       "pre-setup": "",
-      "pre-deploy": "rm -rf /home/sos-ses/* && git clone --depth=1 git@github.com:Tollaris95/sos-ses.git /home/sos-ses",
     },
   },
 };
