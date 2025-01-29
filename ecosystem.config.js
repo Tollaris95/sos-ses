@@ -3,8 +3,7 @@ module.exports = {
     {
       name: "sos-ses",
       script: "npm start",
-      // Exécution de l'application dans /home/sos-ses
-      cwd: "/home/sos-ses",
+      cwd: "/home/sos-ses/source",
       env_production: {
         PORT: 3000,
         NODE_ENV: "production",
