@@ -3,7 +3,8 @@ module.exports = {
     {
       name: "sos-ses",
       script: "npm start",
-      cwd: "/home/sos-ses", 
+      // Exécution de l'application dans /home/sos-ses
+      cwd: "/home/sos-ses",
       env_production: {
         PORT: 3000,
         NODE_ENV: "production",
@@ -17,16 +18,23 @@ module.exports = {
       log_file: "./logs/combined.log",
     },
   ],
+
   deploy: {
     production: {
       user: "root",
       host: "163.172.160.241",
-      ref: "origin/master", 
+      // Mets "origin/main" si ta branche est main :
+      ref: "origin/master",
       repo: "git@github.com:Tollaris95/sos-ses.git",
-      path: "/home/sos-ses", 
+      path: "/home/sos-ses",
+
+      // Hook local : s'exécute avant l'envoi des fichiers (depuis ta machine)
       "pre-deploy-local": "",
-      "pre-deploy": "rm -rf /home/sos-ses/* && git clone --depth=1 -b master git@github.com:Tollaris95/sos-ses.git /home/sos-ses",
-      "post-deploy": "cd /home/sos-ses && npm install && npm run build && pm2 startOrReload ecosystem.config.js",
+
+      // Hook distant (sur le serveur) après que le code soit copié
+      "post-deploy": "npm install && npm run build && pm2 startOrReload ecosystem.config.js",
+
+      // Éventuellement un hook avant le setup (facultatif)
       "pre-setup": "",
     },
   },
