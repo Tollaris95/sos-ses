@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const handleNavClick = (buttonName: string) => {
+    setShowLoginInputs(false);
     setShowQuestion(buttonName === "Quizz");
     setShowConfirmation(false);
     setActiveButton(buttonName);
@@ -51,9 +52,19 @@ const App: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      <Header isLoggedIn={isLoggedIn} onNavClick={handleNavClick} activeButton={activeButton} onLoginToggle={() => setShowLoginInputs(!showLoginInputs)} />
+      {/* Le Header est toujours visible */}
+      <Header
+        isLoggedIn={isLoggedIn}
+        onNavClick={handleNavClick}
+        activeButton={activeButton}
+        onLoginToggle={() => setShowLoginInputs(true)}
+      />
+
       <div style={styles.main}>
-        {!showQuestion ? (
+        {/* Si on est en mode connexion, afficher uniquement LoginForm dans le main */}
+        {showLoginInputs ? (
+          <LoginForm/>
+        ) : !showQuestion ? (
           <HomePage />
         ) : showConfirmation ? (
           <div>
@@ -61,9 +72,10 @@ const App: React.FC = () => {
             <button onClick={handleReturnHome}>Accueil</button>
           </div>
         ) : (
-          <Questionnaire onAnswer={(isCorrect) => setShowConfirmation(isCorrect)} />
+          <Questionnaire
+            onAnswer={(isCorrect) => setShowConfirmation(isCorrect)}
+          />
         )}
-        {showLoginInputs && !isLoggedIn && <LoginForm onLogin={handleLogin} loginError={loginError} />}
       </div>
     </div>
   );

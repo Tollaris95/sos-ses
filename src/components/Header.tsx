@@ -21,6 +21,10 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
+  const backgroundColor = "rgb(245, 185, 66)"; // Fond du header
+  const selectedColor = "rgb(245, 117, 66)"; // Couleur des éléments actifs
+  const defaultColor = "black"; // Couleur des éléments non actifs
+
   if (isMobile) {
     return (
       <div style={{
@@ -29,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
         alignItems: "center",
         padding: "15px",
         borderBottom: "2px solid #ccc",
-        backgroundColor: "#f8f9fa",
+        backgroundColor,
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         position: "relative"
       }}>
@@ -64,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
                   fontWeight: activeButton === item ? "bold" : "normal",
                   padding: "10px",
                   transition: "color 0.3s ease",
-                  color: activeButton === item ? "#007BFF" : "black"
+                  color: activeButton === item ? selectedColor : defaultColor
                 }}
                 onClick={() => {
                   onNavClick(item);
@@ -75,9 +79,11 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
               </button>
             ))}
             {isLoggedIn ? (
-              <button onClick={() => { onNavClick("Création d'exercice"); setIsMenuOpen(false); }} style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? "#007BFF" : "black" }}>Création d'exercice</button>
+              <button onClick={() => { onNavClick("Création d'exercice"); setIsMenuOpen(false); }} 
+                style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? selectedColor : defaultColor }}>Création d'exercice</button>
             ) : (
-              <button onClick={() => { onLoginToggle(); setIsMenuOpen(false); }} style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? "#007BFF" : "black" }}>Connexion</button>
+              <button onClick={() => { onLoginToggle(); setIsMenuOpen(false); }} 
+                style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? selectedColor : defaultColor }}>Connexion</button>
             )}
           </div>
         )}
@@ -92,26 +98,47 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
       alignItems: "center",
       padding: "15px",
       borderBottom: "2px solid #ccc",
-      backgroundColor: "#f8f9fa",
+      backgroundColor,
       boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
     }}>
       <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#333" }}>SOS SES</span>
       {navItems.map((item) => (
         <button
           key={item}
-          style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === item ? "bold" : "normal", position: "relative", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === item ? "#007BFF" : "black" }}
+          style={{ 
+            border: "none", 
+            background: "none", 
+            cursor: "pointer", 
+            fontSize: "1rem", 
+            fontWeight: activeButton === item ? "bold" : "normal", 
+            position: "relative", 
+            padding: "10px 15px", 
+            transition: "color 0.3s ease", 
+            color: activeButton === item ? selectedColor : defaultColor 
+          }}
           onClick={() => onNavClick(item)}
-          onMouseEnter={(e) => e.currentTarget.style.color = "#007BFF"}
-          onMouseLeave={(e) => e.currentTarget.style.color = activeButton === item ? "#007BFF" : "black"}
+          onMouseEnter={(e) => e.currentTarget.style.color = selectedColor}
+          onMouseLeave={(e) => e.currentTarget.style.color = activeButton === item ? selectedColor : defaultColor}
         >
           {item}
-          <span style={{ display: "block", height: "3px", width: activeButton === item ? "100%" : "0%", background: "#007BFF", transition: "width 0.3s ease-in-out", position: "absolute", bottom: "-5px", left: "0" }} />
+          <span style={{ 
+            display: "block", 
+            height: "3px", 
+            width: activeButton === item ? "100%" : "0%", 
+            background: activeButton === item ? selectedColor : "transparent", 
+            transition: "width 0.3s ease-in-out", 
+            position: "absolute", 
+            bottom: "-5px", 
+            left: "0" 
+          }} />
         </button>
       ))}
       {isLoggedIn ? (
-        <button onClick={() => onNavClick("Création d'exercice")} style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? "#007BFF" : "black" }}>Création d'exercice</button>
+        <button onClick={() => onNavClick("Création d'exercice")} 
+          style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? selectedColor : defaultColor }}>Création d'exercice</button>
       ) : (
-        <button onClick={onLoginToggle} style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? "#007BFF" : "black" }}>Connexion</button>
+        <button onClick={onLoginToggle} 
+          style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? selectedColor : defaultColor }}>Connexion</button>
       )}
     </div>
   );
