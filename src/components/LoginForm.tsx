@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Typography, CircularProgress } from "@mui/material";
 import { login } from "../services/login";
-import { verifyToken, getToken } from "../services/jwtHelper"; // Import du helper JWT
+import { verifyToken } from "../services/jwtHelper";
+import { useAuthStore } from "../store/authStore"; 
 
 const LoginForm: React.FC = () => {
+  const { user, login: storeLogin, token } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Vérification du token au chargement du composant
+  // Vérification du token stocké
   useEffect(() => {
     const checkToken = async () => {
-      const token = getToken();
       if (token) {
         const isValid = await verifyToken(token);
-        if (isValid) {
-          setIsAuthenticated(true);
-          console.log("Utilisateur déjà authentifié");
+        if (!isValid) {
+          useAuthStore.getState().logout(); // Déconnexion si le token est invalide
         }
       }
     };
-  
     checkToken();
-  }, []);
-  
+  }, [token]);
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -35,8 +32,8 @@ const LoginForm: React.FC = () => {
       const data = await login(username, password);
       console.log("Connexion réussie :", data);
 
-      // Stocker le token
-      localStorage.setItem("token", data.token);
+      // Stocker le token et l'utilisateur dans Zustand
+      storeLogin(data.token, { username });
 
       // Rafraîchir la page pour charger les infos utilisateur
       window.location.reload();
@@ -60,8 +57,8 @@ const LoginForm: React.FC = () => {
     };
   }, []);
 
-  // Si l'utilisateur est déjà authentifié, on peut le rediriger ou afficher un message
-  if (isAuthenticated) {
+  // Redirection si déjà connecté
+  if (user) {
     return (
       <div
         style={{
@@ -73,7 +70,7 @@ const LoginForm: React.FC = () => {
         }}
       >
         <Typography variant="h5" color="primary">
-          Vous êtes déjà connecté.
+          Vous êtes déjà connecté en tant que {user.username}.
         </Typography>
       </div>
     );

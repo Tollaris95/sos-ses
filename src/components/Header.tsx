@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useAuthStore } from "../store/authStore"; // Import du store Zustand
 
 interface HeaderProps {
-  isLoggedIn: boolean;
   onNavClick: (name: string) => void;
   activeButton: string | null;
   onLoginToggle: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, onLoginToggle }) => {
+const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle }) => {
+  const { user, logout } = useAuthStore(); // Récupérer l'utilisateur connecté depuis Zustand
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const navItems = ["Accueil", "Cours", "Quizz", "Autour du bac", "Aller plus loin"];
@@ -78,12 +79,63 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
                 {item}
               </button>
             ))}
-            {isLoggedIn ? (
-              <button onClick={() => { onNavClick("Création d'exercice"); setIsMenuOpen(false); }} 
-                style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? selectedColor : defaultColor }}>Création d'exercice</button>
+
+            {/* Si l'utilisateur est connecté, on affiche "Création d'exercice" au lieu de "Connexion" */}
+            {user ? (
+              <>
+                <button
+                  onClick={() => {
+                    onNavClick("Création d'exercice");
+                    setIsMenuOpen(false);
+                  }}
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                    fontSize: "1.2rem",
+                    fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal",
+                    padding: "10px",
+                    transition: "color 0.3s ease",
+                    color: activeButton === "Création d'exercice" ? selectedColor : defaultColor
+                  }}
+                >
+                  Création d'exercice
+                </button>
+                <button
+                  onClick={logout}
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                    fontSize: "1.2rem",
+                    fontWeight: "normal",
+                    padding: "10px",
+                    transition: "color 0.3s ease",
+                    color: "red"
+                  }}
+                >
+                  Déconnexion
+                </button>
+              </>
             ) : (
-              <button onClick={() => { onLoginToggle(); setIsMenuOpen(false); }} 
-                style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? selectedColor : defaultColor }}>Connexion</button>
+              <button
+                onClick={() => {
+                  onLoginToggle();
+                  setIsMenuOpen(false);
+                }}
+                style={{
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  fontSize: "1.2rem",
+                  fontWeight: activeButton === "Connexion" ? "bold" : "normal",
+                  padding: "10px",
+                  transition: "color 0.3s ease",
+                  color: activeButton === "Connexion" ? selectedColor : defaultColor
+                }}
+              >
+                Connexion
+              </button>
             )}
           </div>
         )}
@@ -133,12 +185,55 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onNavClick, activeButton, o
           }} />
         </button>
       ))}
-      {isLoggedIn ? (
-        <button onClick={() => onNavClick("Création d'exercice")} 
-          style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Création d'exercice" ? selectedColor : defaultColor }}>Création d'exercice</button>
+
+      {/* Si l'utilisateur est connecté, on affiche "Création d'exercice" et "Déconnexion", sinon "Connexion" */}
+      {user ? (
+        <>
+          <button
+            onClick={() => onNavClick("Création d'exercice")}
+            style={{
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal",
+              padding: "10px 15px",
+              transition: "color 0.3s ease",
+              color: activeButton === "Création d'exercice" ? selectedColor : defaultColor
+            }}
+          >
+            Création d'exercice
+          </button>
+          <button
+            onClick={logout}
+            style={{
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              fontSize: "1rem",
+              padding: "10px 15px",
+              transition: "color 0.3s ease",
+              color: "red"
+            }}
+          >
+            Déconnexion
+          </button>
+        </>
       ) : (
-        <button onClick={onLoginToggle} 
-          style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1rem", fontWeight: activeButton === "Connexion" ? "bold" : "normal", padding: "10px 15px", transition: "color 0.3s ease", color: activeButton === "Connexion" ? selectedColor : defaultColor }}>Connexion</button>
+        <button
+          onClick={onLoginToggle}
+          style={{
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+            fontSize: "1rem",
+            padding: "10px 15px",
+            transition: "color 0.3s ease",
+            color: activeButton === "Connexion" ? selectedColor : defaultColor
+          }}
+        >
+          Connexion
+        </button>
       )}
     </div>
   );
