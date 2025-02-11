@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Typography, CircularProgress } from "@mui/material";
 import { login } from "../services/login";
-import { verifyToken, getToken } from "../helpers/jwtHelper"; // Import du helper JWT
+import { verifyToken, getToken } from "../services/jwtHelper"; // Import du helper JWT
 
 const LoginForm: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -12,12 +12,20 @@ const LoginForm: React.FC = () => {
 
   // Vérification du token au chargement du composant
   useEffect(() => {
-    const token = getToken();
-    if (token && verifyToken(token)) {
-      setIsAuthenticated(true);
-      console.log("Utilisateur déjà authentifié");
-    }
+    const checkToken = async () => {
+      const token = getToken();
+      if (token) {
+        const isValid = await verifyToken(token);
+        if (isValid) {
+          setIsAuthenticated(true);
+          console.log("Utilisateur déjà authentifié");
+        }
+      }
+    };
+  
+    checkToken();
   }, []);
+  
 
   const handleLogin = async () => {
     setIsLoading(true);
