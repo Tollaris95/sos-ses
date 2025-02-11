@@ -22,9 +22,7 @@ const styles = {
 const App: React.FC = () => {
   const [showQuestion, setShowQuestion] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginInputs, setShowLoginInputs] = useState(false);
-  const [loginError, setLoginError] = useState(false);
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const handleNavClick = (buttonName: string) => {
@@ -40,21 +38,10 @@ const App: React.FC = () => {
     setActiveButton(null);
   };
 
-  const handleLogin = (username: string, password: string) => {
-    if (username === "kesiane" && password === "pissenlit") {
-      setIsLoggedIn(true);
-      setLoginError(false);
-      setShowLoginInputs(false);
-    } else {
-      setLoginError(true);
-    }
-  };
-
   return (
     <div style={styles.container}>
       {/* Le Header est toujours visible */}
       <Header
-        isLoggedIn={isLoggedIn}
         onNavClick={handleNavClick}
         activeButton={activeButton}
         onLoginToggle={() => setShowLoginInputs(true)}
