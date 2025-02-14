@@ -8,7 +8,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle }) => {
-  const { user, logout } = useAuthStore(); // Récupérer l'utilisateur connecté depuis Zustand
+  const { user } = useAuthStore(); // Récupérer l'utilisateur connecté depuis Zustand
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const navItems = ["Accueil", "Cours", "Quizz", "Autour du bac", "Aller plus loin"];
@@ -80,12 +80,12 @@ const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle
               </button>
             ))}
 
-            {/* Si l'utilisateur est connecté, on affiche "Création d'exercice" au lieu de "Connexion" */}
+            {/* Si l'utilisateur est connecté, on affiche "Ajout de contenu" au lieu de "Connexion" */}
             {user ? (
               <>
                 <button
                   onClick={() => {
-                    onNavClick("Création d'exercice");
+                    onNavClick("Ajout de contenu");
                     setIsMenuOpen(false);
                   }}
                   style={{
@@ -93,28 +93,13 @@ const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle
                     background: "none",
                     cursor: "pointer",
                     fontSize: "1.2rem",
-                    fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal",
+                    fontWeight: activeButton === "Ajout de contenu" ? "bold" : "normal",
                     padding: "10px",
                     transition: "color 0.3s ease",
-                    color: activeButton === "Création d'exercice" ? selectedColor : defaultColor
+                    color: activeButton === "Ajout de contenu" ? selectedColor : defaultColor
                   }}
                 >
-                  Création d'exercice
-                </button>
-                <button
-                  onClick={logout}
-                  style={{
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                    fontSize: "1.2rem",
-                    fontWeight: "normal",
-                    padding: "10px",
-                    transition: "color 0.3s ease",
-                    color: "red"
-                  }}
-                >
-                  Déconnexion
+                  Ajout de contenu
                 </button>
               </>
             ) : (
@@ -144,79 +129,101 @@ const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle
   }
 
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "space-around",
-      alignItems: "center",
-      padding: "15px",
-      borderBottom: "2px solid #ccc",
-      backgroundColor,
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
-    }}>
-      <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#333" }}>SOS SES</span>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        padding: "15px",
+        borderBottom: "2px solid #ccc",
+        backgroundColor,
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#333" }}>
+        SOS SES
+      </span>
       {navItems.map((item) => (
         <button
           key={item}
-          style={{ 
-            border: "none", 
-            background: "none", 
-            cursor: "pointer", 
-            fontSize: "1rem", 
-            fontWeight: activeButton === item ? "bold" : "normal", 
-            position: "relative", 
-            padding: "10px 15px", 
-            transition: "color 0.3s ease", 
-            color: activeButton === item ? selectedColor : defaultColor 
+          style={{
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+            fontSize: "1rem",
+            fontWeight: activeButton === item ? "bold" : "normal",
+            position: "relative",
+            padding: "10px 15px",
+            transition: "color 0.3s ease",
+            color: activeButton === item ? selectedColor : defaultColor,
           }}
           onClick={() => onNavClick(item)}
-          onMouseEnter={(e) => e.currentTarget.style.color = selectedColor}
-          onMouseLeave={(e) => e.currentTarget.style.color = activeButton === item ? selectedColor : defaultColor}
+          onMouseEnter={(e) => (e.currentTarget.style.color = selectedColor)}
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.color =
+              activeButton === item ? selectedColor : defaultColor)
+          }
         >
           {item}
-          <span style={{ 
-            display: "block", 
-            height: "3px", 
-            width: activeButton === item ? "100%" : "0%", 
-            background: activeButton === item ? selectedColor : "transparent", 
-            transition: "width 0.3s ease-in-out", 
-            position: "absolute", 
-            bottom: "-5px", 
-            left: "0" 
-          }} />
+          <span
+            style={{
+              display: "block",
+              height: "2px",
+              width: activeButton === item ? "100%" : "0%",
+              background: activeButton === item ? selectedColor : "transparent",
+              transition: "width 0.3s ease-in-out",
+              position: "absolute",
+              bottom: "-3px",
+              left: "0",
+            }}
+          />
         </button>
       ))}
 
-      {/* Si l'utilisateur est connecté, on affiche "Création d'exercice" et "Déconnexion", sinon "Connexion" */}
+      {/* Si l'utilisateur est connecté, on affiche "Ajout de contenu" et "Déconnexion", sinon "Connexion" */}
       {user ? (
         <>
           <button
-            onClick={() => onNavClick("Création d'exercice")}
+            onClick={() => onNavClick("Ajout de contenu")}
             style={{
               border: "none",
               background: "none",
               cursor: "pointer",
               fontSize: "1rem",
-              fontWeight: activeButton === "Création d'exercice" ? "bold" : "normal",
+              fontWeight:
+                activeButton === "Ajout de contenu" ? "bold" : "normal",
+              position: "relative",
               padding: "10px 15px",
               transition: "color 0.3s ease",
-              color: activeButton === "Création d'exercice" ? selectedColor : defaultColor
+              color:
+                activeButton === "Ajout de contenu"
+                  ? selectedColor
+                  : defaultColor,
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = selectedColor)}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color =
+                activeButton === "Ajout de contenu"
+                  ? selectedColor
+                  : defaultColor)
+            }
           >
-            Création d'exercice
-          </button>
-          <button
-            onClick={logout}
-            style={{
-              border: "none",
-              background: "none",
-              cursor: "pointer",
-              fontSize: "1rem",
-              padding: "10px 15px",
-              transition: "color 0.3s ease",
-              color: "red"
-            }}
-          >
-            Déconnexion
+            Ajout de contenu
+            <span
+              style={{
+                display: "block",
+                height: "2px",
+                width: activeButton === "Ajout de contenu" ? "100%" : "0%",
+                background:
+                  activeButton === "Ajout de contenu"
+                    ? selectedColor
+                    : "transparent",
+                transition: "width 0.3s ease-in-out",
+                position: "absolute",
+                bottom: "-3px",
+                left: "0",
+              }}
+            />
           </button>
         </>
       ) : (
@@ -229,7 +236,7 @@ const Header: React.FC<HeaderProps> = ({ onNavClick, activeButton, onLoginToggle
             fontSize: "1rem",
             padding: "10px 15px",
             transition: "color 0.3s ease",
-            color: activeButton === "Connexion" ? selectedColor : defaultColor
+            color: activeButton === "Connexion" ? selectedColor : defaultColor,
           }}
         >
           Connexion

@@ -3,17 +3,20 @@ import Header from "./components/Header";
 import LoginForm from "./components/LoginForm";
 import HomePage from "./pages/HomePage";
 import Questionnaire from "./components/Questionnaire";
+import AddContent from "./components/AddContent";
+import Course from "./components/Course/Course";
 
 const styles = {
   container: {
     display: "flex",
     flexDirection: "column" as "column",
-    minHeight: "100vh",
+    height: "100vh",
+    width: "100vw",
+    overflow: "hidden",
     backgroundColor: "#f0f0f0",
     fontFamily: "Arial, sans-serif",
   } as CSSProperties,
   main: {
-    padding: "20px",
     textAlign: "center" as "center",
     flex: 1,
   } as CSSProperties,
@@ -23,18 +26,24 @@ const App: React.FC = () => {
   const [showQuestion, setShowQuestion] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showLoginInputs, setShowLoginInputs] = useState(false);
+  const [showAddContent, setShowAddContent] = useState(false);
   const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [showCourses, setShowCourses] = useState(false);
 
   const handleNavClick = (buttonName: string) => {
+    console.log("Bouton cliqué :", buttonName);
     setShowLoginInputs(false);
     setShowQuestion(buttonName === "Quizz");
     setShowConfirmation(false);
+    setShowAddContent(buttonName === "Ajout de contenu");
+    setShowCourses(buttonName === "Cours");
     setActiveButton(buttonName);
   };
 
   const handleReturnHome = () => {
     setShowQuestion(false);
     setShowConfirmation(false);
+    setShowAddContent(false);
     setActiveButton(null);
   };
 
@@ -46,24 +55,29 @@ const App: React.FC = () => {
         activeButton={activeButton}
         onLoginToggle={() => setShowLoginInputs(true)}
       />
-
       <div style={styles.main}>
-        {/* Si on est en mode connexion, afficher uniquement LoginForm dans le main */}
         {showLoginInputs ? (
-          <LoginForm/>
-        ) : !showQuestion ? (
-          <HomePage />
-        ) : showConfirmation ? (
-          <div>
-            <h1>Ouiii je veux mon bisous</h1>
-            <button onClick={handleReturnHome}>Accueil</button>
-          </div>
+          <LoginForm />
+        ) : showAddContent ? (
+          <AddContent />
+        ) : showCourses ? (
+          <Course />
+        ) : showQuestion ? (
+          showConfirmation ? (
+            <div>
+              <h1>Ouiii je veux mon bisous</h1>
+              <button onClick={handleReturnHome}>Accueil</button>
+            </div>
+          ) : (
+            <Questionnaire
+              onAnswer={(isCorrect) => setShowConfirmation(isCorrect)}
+            />
+          )
         ) : (
-          <Questionnaire
-            onAnswer={(isCorrect) => setShowConfirmation(isCorrect)}
-          />
+          <HomePage />
         )}
       </div>
+      ;
     </div>
   );
 };
